@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
 import 'signup.dart';
-import '/welcome/welcome.dart';
+import '/Welcome/welcome.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'dart:async';
 import '/helpers/connection_status.dart';
