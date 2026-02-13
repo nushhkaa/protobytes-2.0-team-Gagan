@@ -39,6 +39,9 @@ dependencies:
   connectivity_plus: ^6.0.3
   device_info_plus: ^9.1.2
   cryptography: ^2.5.0 # For keypairs, easier than pointycastle
+  qr_flutter: ^4.0.0
+ 
+
 
 
 dev_dependencies:
