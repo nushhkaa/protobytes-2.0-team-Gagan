@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +10,8 @@ import 'dart:async';
 import '/helpers/connection_status.dart';
 import '/helpers/status.dart';
 import '/secure_storage/secure_storage.dart';
-
-
+import 'user_check.dart'; // Import your checker class
+import '/Welcome/register.dart';
 
 // Color palette (Adjust as needed)
 const Color kPrimary = Color(0xFF3949ab); // Indigo[600]
@@ -98,17 +97,32 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.of(context).pop(); // Dismiss loading
         final result = response.body.trim();
         if (result == 'success') {
-          // Store for offline login
           await user_secureStorage.write(key: 'username', value: username);
-          await user_secureStorage.write(key: 'password_hash', value: hashedPassword);
+          await user_secureStorage.write(
+              key: 'password_hash', value: hashedPassword);
+          // Store for offline login
           usernameController.clear();
           passwordController.clear();
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (_) => WelcomePage(username: username),
-            ),
-          );
+          showLoadingDialog();
+          final checker = UserChecker();
+          final passed = await checker.performChecks(username);
+
+          if (passed) {
+            Navigator.of(context).pop(); // Dismiss loading
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) => WelcomePage(username: username),
+              ),
+            );
+          } else {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) => NewUserPage(username: username),
+              ),
+            );
+          }
         } else {
           showDialogBox("Login Failed", result);
         }
